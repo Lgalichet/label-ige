@@ -2,10 +2,11 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useAuth, UserButton, SignInButton, SignUpButton } from '@clerk/nextjs'
+import { useAuth, UserButton } from '@clerk/nextjs'
 import { cn } from '@/lib/utils'
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
+import { clerkSignInUrl, clerkSignUpUrl } from '@/lib/clerk-urls'
 
 const navLinks = [
   { href: '/', label: 'Accueil' },
@@ -61,16 +62,12 @@ export function Navbar() {
               </>
             ) : (
               <>
-                <SignInButton mode="modal" forceRedirectUrl="/espace-createur">
-                  <button className="text-sm font-medium text-[#1A3A5C] hover:underline">
-                    Se connecter
-                  </button>
-                </SignInButton>
-                <SignUpButton mode="modal" forceRedirectUrl="/espace-createur">
-                  <button className="bg-[#1A3A5C] text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#142f4e] transition-colors">
-                    Créer mon label
-                  </button>
-                </SignUpButton>
+                <a href={clerkSignInUrl} className="text-sm font-medium text-[#1A3A5C] hover:underline">
+                  Se connecter
+                </a>
+                <a href={clerkSignUpUrl} className="bg-[#1A3A5C] text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#142f4e] transition-colors">
+                  Créer mon label
+                </a>
               </>
             )}
           </div>
@@ -111,16 +108,12 @@ export function Navbar() {
             </>
           ) : (
             <>
-              <SignInButton mode="modal" forceRedirectUrl="/espace-createur">
-                <button onClick={() => setMenuOpen(false)} className="text-[#1A3A5C] font-medium text-left">
-                  Se connecter
-                </button>
-              </SignInButton>
-              <SignUpButton mode="modal" forceRedirectUrl="/espace-createur">
-                <button onClick={() => setMenuOpen(false)} className="bg-[#1A3A5C] text-white text-center font-semibold px-4 py-2 rounded-lg">
-                  Créer mon label
-                </button>
-              </SignUpButton>
+              <a href={clerkSignInUrl} onClick={() => setMenuOpen(false)} className="text-[#1A3A5C] font-medium">
+                Se connecter
+              </a>
+              <a href={clerkSignUpUrl} onClick={() => setMenuOpen(false)} className="bg-[#1A3A5C] text-white text-center font-semibold px-4 py-2 rounded-lg">
+                Créer mon label
+              </a>
             </>
           )}
         </div>
