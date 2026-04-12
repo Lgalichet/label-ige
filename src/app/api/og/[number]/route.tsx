@@ -3,7 +3,7 @@ import { NextRequest } from 'next/server'
 import { prisma } from '@/lib/db'
 import { getScoreColor } from '@/lib/utils'
 
-export const runtime = 'edge'
+export const runtime = 'nodejs'
 
 export async function GET(
   _req: NextRequest,
@@ -44,7 +44,7 @@ export async function GET(
     {} as Record<string, string>
   )
 
-  const { hex, label } = getScoreColor(project.score, settingsMap)
+  const { hex, mention: label } = getScoreColor(project.score, settingsMap)
   const score = Math.round(project.score)
 
   return new ImageResponse(
