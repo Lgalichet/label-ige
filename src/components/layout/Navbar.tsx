@@ -2,11 +2,10 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useAuth, UserButton } from '@clerk/nextjs'
+import { useSession, signOut } from 'next-auth/react'
 import { cn } from '@/lib/utils'
 import { useState } from 'react'
-import { Menu, X } from 'lucide-react'
-import { clerkSignInUrl, clerkSignUpUrl } from '@/lib/clerk-urls'
+import { Menu, X, LogOut, User } from 'lucide-react'
 
 const navLinks = [
   { href: '/', label: 'Accueil' },
@@ -18,7 +17,8 @@ const navLinks = [
 export function Navbar() {
   const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
-  const { isSignedIn } = useAuth()
+  const { data: session } = useSession()
+  const isSignedIn = !!session
 
   return (
     <nav className="sticky top-0 z-50 bg-white border-b border-[#DEE2E6] shadow-sm">
@@ -58,16 +58,26 @@ export function Navbar() {
                 <Link href="/creer" className="bg-[#1A3A5C] text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#142f4e] transition-colors">
                   Créer un label
                 </Link>
-                <UserButton />
+                <button
+                  onClick={() => signOut({ callbackUrl: '/' })}
+                  className="flex items-center gap-1.5 text-sm text-[#555B6E] hover:text-[#C62828] transition-colors"
+                  title="Se déconnecter"
+                >
+                  {session.user?.image ? (
+                    <img src={session.user.image} alt="" className="w-7 h-7 rounded-full" />
+                  ) : (
+                    <User size={18} />
+                  )}
+                </button>
               </>
             ) : (
               <>
-                <a href={clerkSignInUrl} className="text-sm font-medium text-[#1A3A5C] hover:underline">
+                <Link href="/connexion" className="text-sm font-medium text-[#1A3A5C] hover:underline">
                   Se connecter
-                </a>
-                <a href={clerkSignUpUrl} className="bg-[#1A3A5C] text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#142f4e] transition-colors">
+                </Link>
+                <Link href="/inscription" className="bg-[#1A3A5C] text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#142f4e] transition-colors">
                   Créer mon label
-                </a>
+                </Link>
               </>
             )}
           </div>
@@ -105,15 +115,21 @@ export function Navbar() {
               <Link href="/creer" onClick={() => setMenuOpen(false)} className="bg-[#1A3A5C] text-white text-center font-semibold px-4 py-2 rounded-lg">
                 Créer un label
               </Link>
+              <button
+                onClick={() => { setMenuOpen(false); signOut({ callbackUrl: '/' }) }}
+                className="flex items-center gap-2 text-[#555B6E] font-medium"
+              >
+                <LogOut size={16} /> Se déconnecter
+              </button>
             </>
           ) : (
             <>
-              <a href={clerkSignInUrl} onClick={() => setMenuOpen(false)} className="text-[#1A3A5C] font-medium">
+              <Link href="/connexion" onClick={() => setMenuOpen(false)} className="text-[#1A3A5C] font-medium">
                 Se connecter
-              </a>
-              <a href={clerkSignUpUrl} onClick={() => setMenuOpen(false)} className="bg-[#1A3A5C] text-white text-center font-semibold px-4 py-2 rounded-lg">
+              </Link>
+              <Link href="/inscription" onClick={() => setMenuOpen(false)} className="bg-[#1A3A5C] text-white text-center font-semibold px-4 py-2 rounded-lg">
                 Créer mon label
-              </a>
+              </Link>
             </>
           )}
         </div>

@@ -1,6 +1,6 @@
 'use server'
 
-import { auth, currentUser } from '@clerk/nextjs/server'
+import { auth } from '@/auth'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { prisma } from '@/lib/db'
@@ -36,30 +36,11 @@ const CreateProjectSchema = z.object({
 })
 
 async function getOrCreateUser() {
-  const { userId } = await auth()
-  if (!userId) throw new Error('Non authentifié')
+  const session = await auth()
+  if (!session?.user?.id) throw new Error('Non authentifié')
 
-  const clerkUser = await currentUser()
-  if (!clerkUser) throw new Error('Utilisateur introuvable')
-
-  let user = await prisma.user.findUnique({ where: { clerkId: userId } })
-
-  if (!user) {
-    const email = clerkUser.emailAddresses[0]?.emailAddress ?? ''
-    const username =
-      clerkUser.username ??
-      clerkUser.firstName ??
-      email.split('@')[0] ??
-      `user_${userId.slice(-6)}`
-
-    user = await prisma.user.create({
-      data: {
-        clerkId: userId,
-        email,
-        username,
-      },
-    })
-  }
+  const user = await prisma.user.findUnique({ where: { id: session.user.id } })
+  if (!user) throw new Error('Utilisateur introuvable')
 
   return user
 }

@@ -1,15 +1,15 @@
 export const dynamic = 'force-dynamic'
 
-import { auth } from '@clerk/nextjs/server'
+import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/db'
 import { AdminNav } from '@/components/admin/AdminNav'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const { userId } = await auth()
-  if (!userId) redirect('/connexion')
+  const session = await auth()
+  if (!session?.user?.id) redirect('/connexion')
 
-  const user = await prisma.user.findUnique({ where: { clerkId: userId } })
+  const user = await prisma.user.findUnique({ where: { id: session.user.id } })
   if (!user || user.role !== 'admin') {
     redirect('/')
   }

@@ -1,18 +1,17 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
+import { auth } from '@/auth'
 import { NextResponse } from 'next/server'
 
-const isProtectedRoute = createRouteMatcher([
-  '/espace-createur(.*)',
-  '/creer(.*)',
-])
+export default auth((req) => {
+  const isLoggedIn = !!req.auth
+  const { pathname } = req.nextUrl
 
-const isAdminRoute = createRouteMatcher([
-  '/admin(.*)',
-])
+  const isProtected =
+    pathname.startsWith('/espace-createur') ||
+    pathname.startsWith('/creer') ||
+    pathname.startsWith('/admin')
 
-export default clerkMiddleware(async (auth, req) => {
-  if (isProtectedRoute(req) || isAdminRoute(req)) {
-    await auth.protect()
+  if (isProtected && !isLoggedIn) {
+    return NextResponse.redirect(new URL('/connexion', req.url))
   }
 })
 

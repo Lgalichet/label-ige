@@ -1,15 +1,15 @@
 'use server'
 
-import { auth } from '@clerk/nextjs/server'
+import { auth } from '@/auth'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { prisma } from '@/lib/db'
 
 async function requireAdmin() {
-  const { userId } = await auth()
-  if (!userId) throw new Error('Non authentifié')
+  const session = await auth()
+  if (!session?.user?.id) throw new Error('Non authentifié')
 
-  const user = await prisma.user.findUnique({ where: { clerkId: userId } })
+  const user = await prisma.user.findUnique({ where: { id: session.user.id } })
   if (!user || user.role !== 'admin') throw new Error('Accès refusé')
 
   return user
