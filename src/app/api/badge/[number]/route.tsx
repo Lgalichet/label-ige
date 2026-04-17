@@ -86,7 +86,7 @@ export async function GET(
               letterSpacing: '1px',
             }}
           >
-            #{number}
+            {`#${number}`}
           </div>
         </div>
 
@@ -108,7 +108,7 @@ export async function GET(
               lineHeight: 1,
             }}
           >
-            {score}%
+            {`${score}%`}
           </div>
           <div
             style={{
@@ -161,7 +161,7 @@ export async function GET(
               Vérifier sur
             </div>
             <div style={{ fontSize: '13px', fontWeight: 600, color: '#1A3A5C' }}>
-              {appUrl.replace(/^https?:\/\//, '')}/label/{number}
+              {`${appUrl.replace(/^https?:\/\//, '')}/label/${number}`}
             </div>
           </div>
         </div>
