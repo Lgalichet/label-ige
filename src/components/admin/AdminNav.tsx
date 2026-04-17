@@ -3,10 +3,13 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
-import { LayoutDashboard, HelpCircle, FileText, Users, Settings, ChevronLeft } from 'lucide-react'
+import { LayoutDashboard, HelpCircle, FileText, Users, Settings, ChevronLeft, File, Newspaper, Tag } from 'lucide-react'
 
 const links = [
   { href: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/admin/pages', label: 'Pages', icon: File },
+  { href: '/admin/articles', label: 'Articles', icon: Newspaper },
+  { href: '/admin/categories', label: 'Catégories', icon: Tag },
   { href: '/admin/questions', label: 'Questions', icon: HelpCircle },
   { href: '/admin/projets', label: 'Projets', icon: FileText },
   { href: '/admin/utilisateurs', label: 'Utilisateurs', icon: Users },

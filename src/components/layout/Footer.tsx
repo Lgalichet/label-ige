@@ -33,6 +33,7 @@ export function Footer() {
                 { href: '/comment-ca-marche', label: 'Comment ça marche' },
                 { href: '/pourquoi', label: 'Pourquoi le Label IGE' },
                 { href: '/recherche', label: 'Rechercher un label' },
+                { href: '/blog', label: 'Blog' },
                 { href: '/faq', label: 'FAQ' },
                 { href: '/a-propos', label: 'À propos' },
               ].map((link) => (

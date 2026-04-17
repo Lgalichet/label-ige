@@ -27,6 +27,8 @@ model User {
   updatedAt DateTime @updatedAt
 
   projects Project[]
+  pages    Page[]
+  posts    Post[]
 
   @@map("users")
 }
@@ -99,4 +101,66 @@ model Setting {
   value String
 
   @@map("settings")
+}
+
+// ====================================================================
+// CMS — Pages statiques administrables (type WordPress)
+// ====================================================================
+
+model Page {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  title           String
+  content         String   // markdown
+  excerpt         String?
+  metaTitle       String?
+  metaDescription String?
+  published       Boolean  @default(false)
+  publishedAt     DateTime?
+  authorId        String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  author User? @relation(fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@index([published])
+  @@map("pages")
+}
+
+// ====================================================================
+// Blog
+// ====================================================================
+
+model Post {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  title           String
+  excerpt         String?
+  content         String   // markdown
+  coverImage      String?
+  metaTitle       String?
+  metaDescription String?
+  published       Boolean  @default(false)
+  publishedAt     DateTime?
+  authorId        String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  author     User?      @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  categories Category[] @relation("PostCategories")
+
+  @@index([published, publishedAt])
+  @@map("posts")
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+
+  posts Post[] @relation("PostCategories")
+
+  @@map("categories")
 }
