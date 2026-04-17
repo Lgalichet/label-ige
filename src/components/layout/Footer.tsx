@@ -1,7 +1,23 @@
 import Link from 'next/link'
+import { auth } from '@/auth'
+import { prisma } from '@/lib/db'
 
-export function Footer() {
+export async function Footer() {
   const year = new Date().getFullYear()
+
+  let isAdmin = false
+  try {
+    const session = await auth()
+    if (session?.user?.id) {
+      const user = await prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { role: true },
+      })
+      isAdmin = user?.role === 'admin'
+    }
+  } catch {
+    // session indisponible au build statique : on n'affiche juste pas le lien admin
+  }
 
   return (
     <footer className="bg-[#1A1A2E] text-white mt-auto">
@@ -73,8 +89,16 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-white/10 mt-10 pt-6 text-center text-[#aab0bb] text-xs">
-          © {year} Label IGE — TAMENTO SARL — Tous droits réservés
+        <div className="border-t border-white/10 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[#aab0bb] text-xs">
+          <div>© {year} Label IGE — TAMENTO SARL — Tous droits réservés</div>
+          {isAdmin && (
+            <Link
+              href="/admin/dashboard"
+              className="text-[#aab0bb] hover:text-white transition-colors underline-offset-2 hover:underline"
+            >
+              Administration
+            </Link>
+          )}
         </div>
       </div>
     </footer>
