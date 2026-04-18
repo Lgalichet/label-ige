@@ -10,7 +10,7 @@ import { getSettings } from '@/actions/admin'
 import { LabelCard } from '@/components/labels/LabelCard'
 import { exportUserDataCsv } from '@/actions/projects'
 import { DashboardActions } from '@/components/labels/DashboardActions'
-import { Plus, BarChart2, Hash } from 'lucide-react'
+import { Plus, BarChart2, Hash, Settings } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Mon espace créateur',
@@ -46,12 +46,20 @@ export default async function CreatorDashboardPage() {
           <h1 className="text-3xl font-bold text-[#1A1A2E]">Mon espace créateur</h1>
           <p className="text-[#555B6E] mt-1">Bonjour, <strong>{user.username}</strong></p>
         </div>
-        <Link
-          href="/creer"
-          className="bg-[#1A3A5C] text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-[#142f4e] transition-colors inline-flex items-center gap-2"
-        >
-          <Plus size={18} /> Créer un label
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/espace-createur/profil"
+            className="border border-[#DEE2E6] text-[#1A3A5C] font-semibold px-4 py-2.5 rounded-lg hover:bg-[#F1F3F5] transition-colors inline-flex items-center gap-2"
+          >
+            <Settings size={16} /> Mon profil
+          </Link>
+          <Link
+            href="/creer"
+            className="bg-[#1A3A5C] text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-[#142f4e] transition-colors inline-flex items-center gap-2"
+          >
+            <Plus size={18} /> Créer un label
+          </Link>
+        </div>
       </div>
 
       {/* Compteurs */}

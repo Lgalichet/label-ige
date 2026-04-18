@@ -23,6 +23,16 @@ model User {
   email     String   @unique
   username  String   @unique
   role      UserRole @default(user)
+
+  // Profil public
+  firstName String?
+  lastName  String?
+  avatarUrl String?
+  company   String?
+  jobTitle  String?
+  bio       String?
+  website   String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
